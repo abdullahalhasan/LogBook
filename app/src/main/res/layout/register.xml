@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/nameRegisterET"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:hint="Name"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/emailRegisterET"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:hint="Email"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/passwordRegisterET"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:hint="Password"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/loginBT"
+        android:layout_gravity="center"
+        android:text="Sign UP"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="signup"/>
+
+</LinearLayout>
