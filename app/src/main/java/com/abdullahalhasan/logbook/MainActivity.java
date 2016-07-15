@@ -8,6 +8,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     TextView textView;
+    public static final String DEFAULT = "N/A";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,9 +17,9 @@ public class MainActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.textView);
 
-        SharedPreferences preferences = getSharedPreferences("RegisterPreferences",MODE_PRIVATE);
-        String dispaly = preferences.getString("display","");
+        SharedPreferences preferences = getSharedPreferences("UserData",MODE_PRIVATE);
+        String dispaly = preferences.getString("NAME",DEFAULT);
 
-        textView.setText(dispaly);
+        textView.setText("Welcome "+dispaly);
     }
 }

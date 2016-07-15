@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by ABDULLAH AL HASAN on 7/15/2016.
@@ -15,6 +16,8 @@ public class Login extends AppCompatActivity {
     EditText emailET;
     EditText passwordET;
     TextView registerTV;
+
+    public static final String DEFAULT = "N/A";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +38,31 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(View view) {
-        String email = emailET.getText().toString();
-        String password = passwordET.getText().toString();
+        String userEmail = emailET.getText().toString();
+        String userPassword = passwordET.getText().toString();
 
-        SharedPreferences preferences = getSharedPreferences("RegisterPreferences",MODE_PRIVATE);
-        String userDetails = preferences.getString(email + password + "data","Email and Password Mismatch");
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("dispaly",userDetails);
-        editor.commit();
+        SharedPreferences preferences = getSharedPreferences("UserData",MODE_PRIVATE);
 
-        Intent mainActivity = new Intent(this,MainActivity.class);
-        startActivity(mainActivity);
-        finish();
+//        SharedPreferences.Editor editor = preferences.edit();
+        String savedEmail = preferences.getString("EMAIL",DEFAULT);
+        String savedPassword = preferences.getString("PASSWORD",DEFAULT);
+//        editor.commit();
+
+        if (savedEmail.equals(DEFAULT) || savedPassword.equals(DEFAULT)) {
+
+            Toast.makeText(this,"Register First",Toast.LENGTH_SHORT).show();
+        }
+        else if(userEmail.equals(savedEmail) && userPassword.equals(savedPassword)) {
+            Toast.makeText(this,"Logged in",Toast.LENGTH_SHORT).show();
+            Intent mainActivity = new Intent(this, MainActivity.class);
+            startActivity(mainActivity);
+            finish();
+        }
+        else if(userEmail.equals(null) || userPassword.equals(null)) {
+            Toast.makeText(this,"Enter both Email and Password!!",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(this, "Email & Password mismatch!!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

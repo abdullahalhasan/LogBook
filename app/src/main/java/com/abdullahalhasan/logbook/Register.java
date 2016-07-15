@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by ABDULLAH AL HASAN on 7/15/2016.
@@ -28,14 +29,18 @@ public class Register extends AppCompatActivity {
     }
 
     public void signup(View view) {
-        SharedPreferences preferences = getSharedPreferences("RegisterPreferences", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("UserData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
         String name = nameET.getText().toString();
         String email = emailET.getText().toString();
         String password = passwordET.getText().toString();
 
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(name +email + password + "data",name + "\n" +email + "\n" + password);
+        editor.putString("NAME",name);
+        editor.putString("EMAIL",email);
+        editor.putString("PASSWORD",password);
         editor.commit();
+
+        Toast.makeText(this,"Registration Successfull",Toast.LENGTH_SHORT).show();
 
         Intent loginActivity = new Intent(this,Login.class);
         startActivity(loginActivity);
