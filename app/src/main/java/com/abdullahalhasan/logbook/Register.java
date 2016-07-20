@@ -12,9 +12,18 @@ import android.widget.Toast;
  * Created by ABDULLAH AL HASAN on 7/15/2016.
  */
 public class Register extends AppCompatActivity {
+
+    UserManager userManager;
+
+
     EditText nameET;
     EditText emailET;
     EditText passwordET;
+    EditText confirmPasswordET;
+
+    String name;
+    String email;
+    String password;
 
 
     @Override
@@ -25,25 +34,32 @@ public class Register extends AppCompatActivity {
         nameET = (EditText) findViewById(R.id.nameRegisterET);
         emailET = (EditText) findViewById(R.id.emailRegisterET);
         passwordET = (EditText) findViewById(R.id.passwordRegisterET);
+        confirmPasswordET = (EditText) findViewById(R.id.confirmPasswordRegisterET);
 
     }
 
-    public void signup(View view) {
-        SharedPreferences preferences = getSharedPreferences("UserData", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        String name = nameET.getText().toString();
-        String email = emailET.getText().toString();
-        String password = passwordET.getText().toString();
+    public void register(View view) {
+        if (passwordET.equals(passwordET)) {
 
-        editor.putString("NAME",name);
-        editor.putString("EMAIL",email);
-        editor.putString("PASSWORD",password);
-        editor.commit();
+            name = nameET.getText().toString();
+            email = emailET.getText().toString();
+            password = passwordET.getText().toString();
 
-        Toast.makeText(this,"Registration Successfull",Toast.LENGTH_SHORT).show();
+            User newUser = new User(name,email, password);
+            userManager.addUser(newUser);
 
-        Intent loginActivity = new Intent(this,Login.class);
-        startActivity(loginActivity);
-        finish();
+
+            Toast.makeText(this, "Registration Successfull", Toast.LENGTH_SHORT).show();
+
+            Intent loginActivity = new Intent(this, Login.class);
+            startActivity(loginActivity);
+            finish();
+        }
+        else if(nameET.equals("")||emailET.equals("")||passwordET.equals("")||confirmPasswordET.equals("")) {
+            Toast.makeText(this, "Please Fillup Empty Fields", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(this, "Password Mismatch!", Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,9 +14,12 @@ import android.widget.Toast;
  * Created by ABDULLAH AL HASAN on 7/15/2016.
  */
 public class Login extends AppCompatActivity {
+
+    UserManager userManager;
     EditText emailET;
     EditText passwordET;
     TextView registerTV;
+    CheckBox rememberMeCB;
 
     public static final String DEFAULT = "N/A";
 
@@ -27,6 +31,7 @@ public class Login extends AppCompatActivity {
         emailET = (EditText) findViewById(R.id.emailLoginET);
         passwordET = (EditText) findViewById(R.id.passwordLoginET);
         registerTV = (TextView) findViewById(R.id.registerTV);
+        rememberMeCB = (CheckBox) findViewById(R.id.checkBox);
 
         registerTV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,34 +40,55 @@ public class Login extends AppCompatActivity {
                 startActivity(registerActivity);
             }
         });
+
+        SharedPreferences preferences = getSharedPreferences("RememberMe", MODE_PRIVATE);
+        String email = preferences.getString("EMAIL",DEFAULT);
+        String password = preferences.getString("PASSWORD",DEFAULT);
+
+        if(emailET.equals(DEFAULT) || passwordET.equals(DEFAULT)) {
+
+            emailET.getText().clear();
+            passwordET.getText().clear();
+        }
+        else {
+            emailET.setText(email);
+            passwordET.setText(password);
+        }
     }
 
     public void login(View view) {
         String userEmail = emailET.getText().toString();
         String userPassword = passwordET.getText().toString();
 
-        SharedPreferences preferences = getSharedPreferences("UserData",MODE_PRIVATE);
+        boolean loggedin = userManager.searchPassword(userPassword,userEmail);
 
-//        SharedPreferences.Editor editor = preferences.edit();
-        String savedEmail = preferences.getString("EMAIL",DEFAULT);
-        String savedPassword = preferences.getString("PASSWORD",DEFAULT);
-//        editor.commit();
 
-        if (savedEmail.equals(DEFAULT) || savedPassword.equals(DEFAULT)) {
+        if (rememberMeCB.isChecked()) {
+            SharedPreferences preferences = getSharedPreferences("RememberMe", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
 
-            Toast.makeText(this,"Register First",Toast.LENGTH_SHORT).show();
-        }
-        else if(userEmail.equals(savedEmail) && userPassword.equals(savedPassword)) {
-            Toast.makeText(this,"Logged in",Toast.LENGTH_SHORT).show();
-            Intent mainActivity = new Intent(this, MainActivity.class);
-            startActivity(mainActivity);
-            finish();
-        }
-        else if(userEmail.equals(null) || userPassword.equals(null)) {
-            Toast.makeText(this,"Enter both Email and Password!!",Toast.LENGTH_SHORT).show();
+            String email = emailET.getText().toString();
+            String password = passwordET.getText().toString();
+
+            editor.putString("EMAIL", email);
+            editor.putString("PASSWORD", password);
+            editor.commit();
+
         }
         else {
-            Toast.makeText(this, "Email & Password mismatch!!", Toast.LENGTH_SHORT).show();
+
+            if (loggedin) {
+
+                Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
+                Intent mainActivity = new Intent(this, MainActivity.class);
+                startActivity(mainActivity);
+                finish();
+
+            } else if (userEmail.matches("") || userPassword.equals("")) {
+                Toast.makeText(this, "Please Fillup Empty Fields", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Email & Password mismatch!!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
