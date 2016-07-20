@@ -29,7 +29,7 @@ public class UserManager {
         this.open();
         ContentValues contentValues = new ContentValues();
 
-        String query = "SELECT * FROM"+DatabaseHelper.TABLE_USER;
+        String query = "SELECT * FROM "+DatabaseHelper.TABLE_USER;
         Cursor cursor = database.rawQuery(query,null);
 
         long count = cursor.getCount();
@@ -51,21 +51,25 @@ public class UserManager {
         }
     }
 
-    public Boolean searchPassword(String userPassword, String userEmail){
+    public String searchPassword( String userEmail){
 
         this.open();
 
-        String search = "SELECT "+DatabaseHelper.COL_EMAIL+", "+DatabaseHelper.COL_PASSWORD+"FROM "+DatabaseHelper.TABLE_USER
-                +" WHERE "+DatabaseHelper.COL_PASSWORD+"='"+userPassword+"' AND "+DatabaseHelper.COL_EMAIL+"='"+userEmail+"'";
-        if (search=="") {
-            return false;
+        String search = "SELECT "+DatabaseHelper.COL_EMAIL+", "+DatabaseHelper.COL_PASSWORD+" FROM "+DatabaseHelper.TABLE_USER;
+        Cursor cursor = database.rawQuery(search,null);
+        String email, password="not found";
+        if (cursor.moveToFirst()) {
+            do{
+                email = cursor.getString(0);
+
+                if (email.equals(userEmail)){
+                    password = cursor.getString(1);
+                    break;
+                }
+            }while (cursor.moveToNext());
         }
 
-        else {
-            return true;
-        }
-
-
+        return password;
     }
 
 

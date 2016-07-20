@@ -4,12 +4,6 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.1"
 
-    buildTypes {
-        debug {
-            debuggable true
-        }
-    }
-
 
     defaultConfig {
         applicationId "com.example.abdullahalhasan.digitallogbook"

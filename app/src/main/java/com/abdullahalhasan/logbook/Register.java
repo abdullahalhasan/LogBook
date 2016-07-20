@@ -14,6 +14,7 @@ import android.widget.Toast;
 public class Register extends AppCompatActivity {
 
     UserManager userManager;
+    User newUser;
 
 
     EditText nameET;
@@ -24,6 +25,7 @@ public class Register extends AppCompatActivity {
     String name;
     String email;
     String password;
+    String confirmPassword;
 
 
     @Override
@@ -39,27 +41,26 @@ public class Register extends AppCompatActivity {
     }
 
     public void register(View view) {
-        if (passwordET.equals(passwordET)) {
 
-            name = nameET.getText().toString();
-            email = emailET.getText().toString();
-            password = passwordET.getText().toString();
+        name = nameET.getText().toString().trim();
+        email = emailET.getText().toString().trim();
+        password = passwordET.getText().toString().trim();
+        confirmPassword = confirmPasswordET.getText().toString().trim();
 
-            User newUser = new User(name,email, password);
+        if (confirmPassword.equals(password)) {
+
+            newUser = new User(name, email, password);
+            userManager = new UserManager(this);
             userManager.addUser(newUser);
-
 
             Toast.makeText(this, "Registration Successfull", Toast.LENGTH_SHORT).show();
 
             Intent loginActivity = new Intent(this, Login.class);
             startActivity(loginActivity);
             finish();
-        }
-        else if(nameET.equals("")||emailET.equals("")||passwordET.equals("")||confirmPasswordET.equals("")) {
-            Toast.makeText(this, "Please Fillup Empty Fields", Toast.LENGTH_LONG).show();
-        }
-        else {
+        } else {
             Toast.makeText(this, "Password Mismatch!", Toast.LENGTH_LONG).show();
         }
+
     }
 }

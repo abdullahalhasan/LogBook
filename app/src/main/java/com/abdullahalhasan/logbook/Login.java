@@ -16,6 +16,7 @@ import android.widget.Toast;
 public class Login extends AppCompatActivity {
 
     UserManager userManager;
+
     EditText emailET;
     EditText passwordET;
     TextView registerTV;
@@ -36,7 +37,7 @@ public class Login extends AppCompatActivity {
         registerTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent registerActivity = new Intent(Login.this,Register.class);
+                Intent registerActivity = new Intent(Login.this, Register.class);
                 startActivity(registerActivity);
             }
         });
@@ -45,7 +46,7 @@ public class Login extends AppCompatActivity {
         String email = preferences.getString("EMAIL",DEFAULT);
         String password = preferences.getString("PASSWORD",DEFAULT);
 
-        if(emailET.equals(DEFAULT) || passwordET.equals(DEFAULT)) {
+        if(email.equals(DEFAULT) || password.equals(DEFAULT)) {
 
             emailET.getText().clear();
             passwordET.getText().clear();
@@ -59,8 +60,9 @@ public class Login extends AppCompatActivity {
     public void login(View view) {
         String userEmail = emailET.getText().toString();
         String userPassword = passwordET.getText().toString();
+        userManager = new UserManager(this);
 
-        boolean loggedin = userManager.searchPassword(userPassword,userEmail);
+        String databasePassword = userManager.searchPassword(userEmail);
 
 
         if (rememberMeCB.isChecked()) {
@@ -74,21 +76,20 @@ public class Login extends AppCompatActivity {
             editor.putString("PASSWORD", password);
             editor.commit();
 
+        } else {
+
         }
-        else {
 
-            if (loggedin) {
+        if (userPassword.equals(databasePassword)) {
 
-                Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
-                Intent mainActivity = new Intent(this, MainActivity.class);
-                startActivity(mainActivity);
-                finish();
+            Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
+            Intent mainActivity = new Intent(this, MainActivity.class);
+            startActivity(mainActivity);
+            finish();
 
-            } else if (userEmail.matches("") || userPassword.equals("")) {
-                Toast.makeText(this, "Please Fillup Empty Fields", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Email & Password mismatch!!", Toast.LENGTH_SHORT).show();
-            }
+        } else {
+            Toast.makeText(this, "Email & Password mismatch!!", Toast.LENGTH_SHORT).show();
         }
+
     }
 }
